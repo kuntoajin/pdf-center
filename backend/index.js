@@ -20,6 +20,7 @@ app.use(cors())
 // initRoutes(app);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname + "/resource"))
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -45,8 +46,12 @@ app.post('/upload', multer({ storage }).single("file"),
                 data: "No File is selected.",
             });
         }
-        res.send(file);
-    })
+        console.log(req.file)
+        res.json({
+            file: 'http://localhost:9966/static/uploads/' + req.file.filename
+        })
+    }
+)
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
